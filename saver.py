@@ -9,7 +9,7 @@ import os
 class Saver:
     USERNAME = os.getenv('username')
     PASSWORD = os.getenv('password')
-    HOST = os.getenv('host')
+    HOST = os.getenv('instance_host')
     DATABASE_NAME = os.getenv('database_name')
     PORT = os.getenv('port')
     def __init__(self):

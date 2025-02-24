@@ -10,8 +10,8 @@ import json
 app = Flask(__name__)
 USERNAME = os.getenv('username')
 PASSWORD = os.getenv('password')
-HOST = os.getenv('host')
-DATABASE_NAME = os.getenv('database_name')
+HOST = os.getenv('instance_host')
+DATABASE_NAME = os.getenv('database_name') 
 PORT = os.getenv('port')
 connection_url = f'mysql://{USERNAME}:{PASSWORD}@{HOST}/{DATABASE_NAME}'
 app.config['SQLALCHEMY_DATABASE_URI'] = connection_url
