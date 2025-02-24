@@ -1,0 +1,44 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lazada Scrapping Website</title>
+</head>
+<body>
+    <h2>Lazada Web Scrapper</h2>
+    <a href="{{ url_for('display_products') }}">View product list</a>
+    <div class="form-container">
+        <form action="{{ url_for('home') }}" method="POST">
+            <div class="word-container">
+                <label for="scrappingKeyword">Input your scrapping keyword</label>
+                <input name="scrappingKeyword" type="text" placeholder="Input your scrapping keywords here">
+            </div>
+            <div class="page-container">
+                <label for="scrappingPages">Input the total pages to scrape</label>
+                <input name="scrappingPages" type="text" placeholder="Input the total pages to scrape">
+            </div>
+            <button>Launch scrapping jobs</button>
+        </form>
+    </div>
+    <div class="cookies-container">
+        <form action="{{ url_for('refresh_cookies') }}" method="POST">
+            <div class="cookies-container">
+                <label for="rawCookies">Input your raw cookies here</label>
+                <input name="rawCookies" type="text" placeholder="Input your raw cookies here">
+            </div>
+            <button>Renew cookies</button>
+        </form>
+    </div>
+    {% if message %}
+        <script>
+            const formContainer = document.querySelector('.form-container')
+            const pElement = document.createElement('p')
+            pElement.textContent = '{{ message }}'
+            formContainer.appendChild(pElement)
+            setTimeout(() => {
+            formContainer.removeChild(pElement);
+            }, 3000);  
+        </script>
+    {% endif %}
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <title>Product Display</title>
+</head>
+<body>
+    <h1>Product List</h1>
+    <button>
+        <a href="{{ url_for('home') }}">Back to home page</a>
+    </button>
+    <main>
+        <div class="filter-bar">
+
+            <div class="filter-product">
+                <label for="categories">Choose to filter by the search keyword</label>
+                <select name="categories" id="categories">
+                    {% for category in categories %}
+                        <option value="{{ category.category_raw }}">{{ category.category_raw }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="filter-price">
+                <label for="sortPrice">Sort by Price</label>
+                <select id="sortPrice">
+                    <option value="asc">Lowest Price First</option>
+                    <option value="desc">Highest Price First</option>
+                </select>
+            </div>
+
+        </div>
+        <div class="product-list">
+            {% for product in products %}
+            <div class="product-container" data-category="{{ product.search_word }}">
+                <div class="image-information">
+                    <div class="image-display">
+                        <a href="{{ product.product_url if product.product_url.startswith('http') else 'https://' + product.product_url }}" target="_blank">
+                            <div class="image-wrapper">
+                                <img src="{{ product.image_url }}" alt="{{ product.product_name }}" />
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="productText">
+                    <h3>{{ product.product_name }}</h3>
+                    <p><strong>Search Word:</strong> {{ product.search_word }}</p>
+                    <p><strong>Rating Score:</strong> {{ product.product_rating_score }}</p>
+                    <p><strong>Retail Price:</strong> 
+                        <span class="price" data-price="{{ product.retail_price }}">
+                            {{ "{:,.0f}".format(product.retail_price) }}
+                        </span>
+                    </p>
+                    <p><strong>Selling Price:</strong>
+                        <span class="price" data-price="{{ product.selling_price }}">
+                            {{ "{:,.0f}".format(product.selling_price) }}
+                        </span>
+                    </p>
+                    <p><strong>Total Units Sold:</strong> {{ product.total_units_sold }}</p>
+                    <p><strong>Display Price:</strong> {{ product.display_price }}</p>
+                    <p><strong>Product Reviews:</strong> {{ product.product_reviews }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const categorySelect = document.getElementById("categories");
+            const productContainers = document.querySelectorAll(".product-container");
+    
+            categorySelect.addEventListener("change", function () {
+                const selectedCategory = this.value;
+    
+                productContainers.forEach(product => {
+                    const productCategory = product.getAttribute("data-category");
+    
+                    if (selectedCategory === "all" || productCategory === selectedCategory) {
+                        product.style.display = "block"; 
+                    } else {
+                        product.style.display = "none"; 
+                    }
+                });
+            });
+        });
+    </script>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("sortPrice").addEventListener("change", sortProductsByPrice);
+        });
+
+        function sortProductsByPrice() {
+            let sortOrder = document.getElementById("sortPrice").value; // Get selected option (asc or desc)
+            let products = Array.from(document.querySelectorAll(".product-container"));
+
+            products.sort((a, b) => {
+                let priceA = parseFloat(a.querySelector(".price[data-price]").getAttribute("data-price").replace(/,/g, ""));
+                let priceB = parseFloat(b.querySelector(".price[data-price]").getAttribute("data-price").replace(/,/g, ""));
+
+                return sortOrder === "asc" ? priceA - priceB : priceB - priceA;
+            });
+
+            let productList = document.querySelector(".product-list");
+            productList.innerHTML = "";
+            products.forEach(product => productList.appendChild(product));
+        }
+    </script>
+
+</body>
+</html>
