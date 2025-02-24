@@ -7,7 +7,7 @@ from saver import Saver
 
 class Scrapper:
     MAX_RETRIES = 1
-    COOKIES_PATH = r'/home/ubuntu/cookies.json'
+    COOKIES_PATH = '/home/ubuntu/cookies.json'
     def __init__(self, 
                  search_word: str,
                  scrapped_pages: int):
@@ -29,7 +29,7 @@ class Scrapper:
             while current_retry < Scrapper.MAX_RETRIES:
                 try:
                     scrapped_url = f"https://www.lazada.vn/catalog/?ajax=true&isFirstRequest=true&page={page}&q={self.encoded_query_string}"
-                    response = requests.request("GET", impersonate="chrome", url=scrapped_url, cookies=Scrapper.COOKIES_PATH)
+                    response = requests.request("GET", impersonate="chrome100", url=scrapped_url, cookies=Scrapper.COOKIES_PATH)
                     print(f'Made requests to {scrapped_url}, the status code is at {response.status_code}')
                     list_items = response.json().get('mods').get('listItems')
                     for product_node in list_items:
